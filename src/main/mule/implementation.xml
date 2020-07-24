@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:american-flights-api="http://www.mulesoft.org/schema/mule/american-flights-api" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/american-flights-api http://www.mulesoft.org/schema/mule/american-flights-api/current/mule-american-flights-api.xsd">
+	<flow name="getAmericanFlightsFlow" doc:id="c1a3075a-580f-440d-9a49-b225923e25bb" >
+		<http:listener doc:name="Listener" doc:id="0476e143-4082-4ba4-9054-c8d700bb6d9d" config-ref="httpListenerConnector" path="/flights"/>
+		<american-flights-api:get-flights doc:name="Get flights" doc:id="1b82b01a-3089-46a0-be69-11c57f23b8c3" config-ref="American_Flights_API_Connector" client-id="cefc67c911eb422486c1041988f1141c" client-secret="6Fe53eBaD91F419BAe47E81E146c2653"/>
+		<logger level="INFO" doc:name="Logger" doc:id="28862048-e22c-4ddb-95f3-b0e98cfe8e7a" message="#[payload]"/>
+	</flow>
+</mule>
