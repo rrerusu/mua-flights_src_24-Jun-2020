@@ -8,7 +8,8 @@ http://www.mulesoft.org/schema/mule/american-flights-api http://www.mulesoft.org
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<flow name="getAmericanFlightsFlow" doc:id="c1a3075a-580f-440d-9a49-b225923e25bb" >
 		<http:listener doc:name="Listener" doc:id="0476e143-4082-4ba4-9054-c8d700bb6d9d" config-ref="httpListenerConnector" path="/flights"/>
-		<american-flights-api:get-flights doc:name="Get flights" doc:id="1b82b01a-3089-46a0-be69-11c57f23b8c3" config-ref="American_Flights_API_Connector" client-id="${american.client_id}" client-secret="${american.client_secret}"/>
+		<set-variable value="#[message.attributes.queryParams.'code' as String default null]" doc:name="cityCode" doc:id="3d56c1cb-2a5f-4fb7-9a30-bb570e8be9eb" variableName="cityCode"/>
+		<american-flights-api:get-flights doc:name="Get flights" doc:id="1b82b01a-3089-46a0-be69-11c57f23b8c3" config-ref="American_Flights_API_Connector" client-id="${american.client_id}" client-secret="${american.client_secret}" destination="#[vars.cityCode]"/>
 		<ee:transform doc:name="Transform Message" doc:id="aa03b1ae-990d-44cf-ad2c-3d7093fe0874" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
