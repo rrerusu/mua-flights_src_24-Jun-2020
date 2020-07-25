@@ -8,12 +8,39 @@ type mua_flight_response = Array<{|  airline: String,   flightCode: String,   fr
 
 ]]></types:shape>
     </types:type>
+    <types:type name="united-flight-response" format="json">
+      <types:shape format="weave" example="examples/united-responcse.json"><![CDATA[%dw 2.0
+
+type united_flight_response = {|
+  flights: Array<{|    code: String,     price: Number {"typeId": "int"},     origin: String,     destination: String,     departureDate: String,     airlineName: String,     planeType: String,     emptySeats: Number {"typeId": "int"}  |}>
+|} {"example": "{\\\"flights\\\":[{\\\"code\\\":\\\"ER9fje\\\",\\\"price\\\":845,\\\"origin\\\":\\\"MUA\\\",\\\"destination\\\":\\\"CLE\\\",\\\"departureDate\\\":\\\"2015\\/07\\/11\\\",\\\"airlineName\\\":\\\"United\\\",\\\"planeType\\\":\\\"Boeing 727\\\",\\\"emptySeats\\\":32},{\\\"code\\\":\\\"ER3kfd\\\",\\\"price\\\":245,\\\"origin\\\":\\\"MUA\\\",\\\"destination\\\":\\\"CLE\\\",\\\"departureDate\\\":\\\"2015\\/08\\/11\\\",\\\"airlineName\\\":\\\"United\\\",\\\"planeType\\\":\\\"Boeing 747\\\",\\\"emptySeats\\\":13}]}"}
+
+]]></types:shape>
+    </types:type>
   </types:catalog>
   <types:enrichment select="#aa03b1ae-990d-44cf-ad2c-3d7093fe0874">
     <types:processor-declaration>
       <types:output-event>
         <types:message>
           <types:payload type="mua-flight-response"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#aa52fef8-c7e1-4dd8-99e1-895881f869d6">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="mua-flight-response"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#1ab6a774-55cf-493f-9eb4-d842343c2122">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="united-flight-response"/>
         </types:message>
       </types:output-event>
     </types:processor-declaration>

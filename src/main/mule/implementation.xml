@@ -7,8 +7,8 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 http://www.mulesoft.org/schema/mule/american-flights-api http://www.mulesoft.org/schema/mule/american-flights-api/current/mule-american-flights-api.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<flow name="getAmericanFlightsFlow" doc:id="c1a3075a-580f-440d-9a49-b225923e25bb" >
-		<http:listener doc:name="Listener" doc:id="0476e143-4082-4ba4-9054-c8d700bb6d9d" config-ref="httpListenerConnector" path="/flights"/>
-		<set-variable value="#[message.attributes.queryParams.'code' as String default null]" doc:name="cityCode" doc:id="3d56c1cb-2a5f-4fb7-9a30-bb570e8be9eb" variableName="cityCode"/>
+		<http:listener doc:name="Listener" doc:id="0476e143-4082-4ba4-9054-c8d700bb6d9d" config-ref="httpListenerConnector" path="/american"/>
+		<flow-ref doc:name="setCityCode" doc:id="fcf7de12-a2cf-4a52-be8f-635783e9a799" name="setCityCode"/>
 		<american-flights-api:get-flights doc:name="Get flights" doc:id="1b82b01a-3089-46a0-be69-11c57f23b8c3" config-ref="American_Flights_API_Connector" client-id="${american.client_id}" client-secret="${american.client_secret}" destination="#[vars.cityCode]"/>
 		<ee:transform doc:name="Transform Message" doc:id="aa03b1ae-990d-44cf-ad2c-3d7093fe0874" >
 			<ee:message >
@@ -30,4 +30,36 @@ payload map ( payload01 , indexOfPayload01 ) -> {
 		</ee:transform>
 		<logger level="INFO" doc:name="Logger" doc:id="28862048-e22c-4ddb-95f3-b0e98cfe8e7a" message="#[payload]"/>
 	</flow>
+	<flow name="getUnitedFlightsFlow" doc:id="26c752a9-6965-4b1e-805e-be740c20d77b" >
+		<http:listener doc:name="Listener" doc:id="8edbc894-7df9-4de5-a095-ae40d096af6d" config-ref="httpListenerConnector" path="/united"/>
+		<flow-ref doc:name="setCityCode" doc:id="7435fc30-fcb7-4d8a-9571-74906688ef8f" name="setCityCode"/>
+		<http:request method="GET" doc:name="United Flghts Request" doc:id="1ab6a774-55cf-493f-9eb4-d842343c2122" url="http://mu.learn.mulesoft.com/united/flights/{code}">
+			<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"code" : vars.cityCode default ""
+}]]]></http:uri-params>
+		</http:request>
+		<ee:transform doc:name="Transform Message" doc:id="aa52fef8-c7e1-4dd8-99e1-895881f869d6" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload.flights map ( flight , indexOfFlight ) -> {
+	airline: flight.airlineName,
+	flightCode: flight.code,
+	fromAirportCode: flight.origin,
+	toAirportCode: flight.destination,
+	departureDate: flight.departureDate,
+	emptySeats: flight.emptySeats,
+	price: flight.price,
+	planeType: flight.planeType
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="36d76d31-aa2a-4786-9aad-29fbd8dd7b29" message="#[message.payload]"/>
+	</flow>
+	<sub-flow name="setCityCode" doc:id="d19d2ec8-3f03-4f7b-8b1a-80b469c8a15c" >
+		<set-variable value="#[message.attributes.queryParams.'code' as String default null]" doc:name="cityCode" doc:id="3d56c1cb-2a5f-4fb7-9a30-bb570e8be9eb" variableName="cityCode" />
+	</sub-flow>
 </mule>
