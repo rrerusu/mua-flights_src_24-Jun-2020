@@ -45,4 +45,31 @@ type united_flight_response = {|
       </types:output-event>
     </types:processor-declaration>
   </types:enrichment>
+  <types:enrichment select="#36d53de4-eef8-4e26-88a8-b4fcbaf8cc43">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="mua-flight-response"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#5138122d-0f5e-4dc9-836f-1ccfbfb5b0ee">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="mua-flight-response"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#bddbb3d7-57e4-44c6-a5d3-5ec8523e09d1">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="mua-flight-response"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
 </types:mule>

@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <mule
+	xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc"
 	xmlns:american-flights-api="http://www.mulesoft.org/schema/mule/american-flights-api"
 	xmlns:http="http://www.mulesoft.org/schema/mule/http"
 	xmlns="http://www.mulesoft.org/schema/mule/core"
 	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
-http://www.mulesoft.org/schema/mule/american-flights-api http://www.mulesoft.org/schema/mule/american-flights-api/current/mule-american-flights-api.xsd">
+http://www.mulesoft.org/schema/mule/american-flights-api http://www.mulesoft.org/schema/mule/american-flights-api/current/mule-american-flights-api.xsd
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd">
 	<http:listener-config
 		name="httpListenerConnector"
 		doc:name="HTTP Listener config"
@@ -30,5 +31,9 @@ http://www.mulesoft.org/schema/mule/american-flights-api http://www.mulesoft.org
 		doc:id="d29d6fc7-39e0-4182-a790-5a91a288c3f7"
 		name="env"
 		value="DEV" />
+	
 	<american-flights-api:config name="American_Flights_API_Connector" doc:name="American Flights API Config" doc:id="e9ee831a-4f93-4178-919b-9254a69052bf" property_host="${american.host}" property_port="${american.port}" property_basePath="${american.basePath}" property_protocol="${american.protocol}"/>
+	<wsc:config name="Delta_Web_Service_Consumer_Config" doc:name="Web Service Consumer Config" doc:id="6f47665e-5481-4e79-9088-771a8d6bc6f0" >
+		<wsc:connection wsdlLocation="http://ilt.learn.mulesoft.com/delta?wsdl" service="TicketServiceService" port="TicketServicePort" address="http://ilt.learn.mulesoft.com/delta" />
+	</wsc:config>
 </mule>
