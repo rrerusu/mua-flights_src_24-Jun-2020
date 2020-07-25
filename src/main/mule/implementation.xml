@@ -33,7 +33,7 @@ payload map ( payload01 , indexOfPayload01 ) -> {
 	<flow name="getUnitedFlightsFlow" doc:id="26c752a9-6965-4b1e-805e-be740c20d77b" >
 		<http:listener doc:name="Listener" doc:id="8edbc894-7df9-4de5-a095-ae40d096af6d" config-ref="httpListenerConnector" path="/united"/>
 		<flow-ref doc:name="setCityCode" doc:id="7435fc30-fcb7-4d8a-9571-74906688ef8f" name="setCityCode"/>
-		<http:request method="GET" doc:name="United Flghts Request" doc:id="1ab6a774-55cf-493f-9eb4-d842343c2122" url="http://mu.learn.mulesoft.com/united/flights/{code}">
+		<http:request method="GET" doc:name="United Flghts Request" doc:id="1ab6a774-55cf-493f-9eb4-d842343c2122" url="${united.url}">
 			<http:uri-params ><![CDATA[#[output application/java
 ---
 {

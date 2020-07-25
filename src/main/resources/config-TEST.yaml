@@ -13,3 +13,7 @@ american:
   protocol: "HTTP"
   client_id: "cefc67c911eb422486c1041988f1141c"
   client_secret: "6Fe53eBaD91F419BAe47E81E146c2653"
+  
+# united http request propererties
+united:
+  url: "http://mu.learn.mulesoft.com/united/flights/{code}"
