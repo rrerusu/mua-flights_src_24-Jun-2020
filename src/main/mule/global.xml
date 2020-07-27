@@ -34,6 +34,6 @@ http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/
 	
 	<american-flights-api:config name="American_Flights_API_Connector" doc:name="American Flights API Config" doc:id="e9ee831a-4f93-4178-919b-9254a69052bf" property_host="${american.host}" property_port="${american.port}" property_basePath="${american.basePath}" property_protocol="${american.protocol}"/>
 	<wsc:config name="Delta_Web_Service_Consumer_Config" doc:name="Web Service Consumer Config" doc:id="6f47665e-5481-4e79-9088-771a8d6bc6f0" >
-		<wsc:connection wsdlLocation="http://ilt.learn.mulesoft.com/delta?wsdl" service="TicketServiceService" port="TicketServicePort" address="http://ilt.learn.mulesoft.com/delta" />
+		<wsc:connection wsdlLocation="${delta.wsdl}" service="${delta.service}" port="${delta.port}" address="${delta.address}" />
 	</wsc:config>
 </mule>
