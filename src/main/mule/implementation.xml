@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <mule
+	xmlns:validation="http://www.mulesoft.org/schema/mule/validation"
 	xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc"
 	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
 	xmlns:american-flights-api="http://www.mulesoft.org/schema/mule/american-flights-api"
 	xmlns:http="http://www.mulesoft.org/schema/mule/http"
 	xmlns="http://www.mulesoft.org/schema/mule/core"
 	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/american-flights-api http://www.mulesoft.org/schema/mule/american-flights-api/current/mule-american-flights-api.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
-http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd">
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd">
 	
 	<flow name="getFlights_main" doc:id="abe5daf6-de7a-425d-a3de-dbd261eec1db" >
 		<http:listener doc:name="Listener" doc:id="2e557bd0-b292-4390-b825-ba9631f9d77a" config-ref="httpListenerConnector" path="/flights"/>
 		<flow-ref doc:name="setCityCode_and_setAirlineName" doc:id="bd0e7e38-f8b9-4fe0-bdc0-8f3a0c34d9e1" name="setCityCode_and_setAirlineName"/>
+		<validation:is-true doc:name="Is Valid Destination?" doc:id="5b85ca1a-168f-4181-b946-b0d1c48a3841" expression="#[['SFO', 'LAX', 'CLE', 'PDX', 'PDF'] contains vars.cityCode]" message="#['Invalid destination' ++ ' ' ++ (vars.cityCode default ' ')]"/>
 		<choice doc:name="Choice" doc:id="6cc1fb95-ad01-49ac-9bbd-d0f6caa2dc58" >
 			<when expression="#[vars.airlineName == 'american']">
 				<flow-ref doc:name="getAmericanFlightsFlow" doc:id="491b6069-0baa-4d41-ba37-23ab15a0463e" name="getAmericanFlightsFlow"/>
