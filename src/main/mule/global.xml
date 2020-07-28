@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <mule
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
 	xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc"
 	xmlns:american-flights-api="http://www.mulesoft.org/schema/mule/american-flights-api"
 	xmlns:http="http://www.mulesoft.org/schema/mule/http"
 	xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/american-flights-api http://www.mulesoft.org/schema/mule/american-flights-api/current/mule-american-flights-api.xsd
-http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd">
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<http:listener-config
 		name="httpListenerConnector"
 		doc:name="HTTP Listener config"
@@ -36,4 +37,19 @@ http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/
 	<wsc:config name="Delta_Web_Service_Consumer_Config" doc:name="Web Service Consumer Config" doc:id="6f47665e-5481-4e79-9088-771a8d6bc6f0" >
 		<wsc:connection wsdlLocation="${delta.wsdl}" service="${delta.service}" port="${delta.port}" address="${delta.address}" />
 	</wsc:config>
+	<configuration doc:name="Configuration" doc:id="ea337674-a98a-45a0-b16b-abf391961768" defaultErrorHandler-ref="globalError_Handler" />
+	<error-handler name="globalError_Handler" doc:id="289b32ae-46bc-47e7-94c1-6b5267d695be" >
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="e2b07c38-8329-4bb9-8f70-9dfe5c8a486c" when='#[error causedBy "WSC:CONNECTIVITY"]'>
+			<set-payload value="#[{
+	'namespace': error.errorType.namespace as String,
+	'identifier': error.errorType.identifier as String ++ '',
+	'message': 'Connection Error'
+}]" doc:name="Set Payload" doc:id="9bc3ae6f-749f-4fc9-86b9-1be7f064216b" />
+			<logger level="INFO" doc:name="Logger" doc:id="1f0ca02c-0872-4231-948b-45a26d852bd8" message="#[payload]"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="2b7419da-cae1-454c-b81d-6cc1ac00fedd" type="ANY">
+			<set-payload value="#[error.description]" doc:name="Set Payload" doc:id="6048063a-47dc-481d-b1e0-4b6eabe7992c" />
+			<logger level="INFO" doc:name="Logger" doc:id="de7d9f41-ad21-43f6-b870-d479e4fd9df7" message="#[payload]"/>
+		</on-error-propagate>
+	</error-handler>
 </mule>
