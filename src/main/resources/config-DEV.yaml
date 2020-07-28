@@ -22,5 +22,5 @@ united:
 delta:
   wsdl: "http://ilt.learn.mulesoft.com/delta?wsdl"
   service: "TicketServiceService"
-  port: "TicketServicePort---"
+  port: "TicketServicePort"
   address: "http://ilt.learn.mulesoft.com/delta"

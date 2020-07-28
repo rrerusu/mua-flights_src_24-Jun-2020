@@ -41,14 +41,19 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 	<error-handler name="globalError_Handler" doc:id="289b32ae-46bc-47e7-94c1-6b5267d695be" >
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="e2b07c38-8329-4bb9-8f70-9dfe5c8a486c" when='#[error causedBy "WSC:CONNECTIVITY"]'>
 			<set-payload value="#[{
+	'message': 'Delta SOAP Error',
 	'namespace': error.errorType.namespace as String,
-	'identifier': error.errorType.identifier as String ++ '',
-	'message': 'Connection Error'
+	'identifier': error.errorType.identifier as String ++ ''
 }]" doc:name="Set Payload" doc:id="9bc3ae6f-749f-4fc9-86b9-1be7f064216b" />
 			<logger level="INFO" doc:name="Logger" doc:id="1f0ca02c-0872-4231-948b-45a26d852bd8" message="#[payload]"/>
 		</on-error-propagate>
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="2b7419da-cae1-454c-b81d-6cc1ac00fedd" type="ANY">
-			<set-payload value="#[error.description]" doc:name="Set Payload" doc:id="6048063a-47dc-481d-b1e0-4b6eabe7992c" />
+			<set-payload value="#[{
+	'message': 'All other errors handler',
+	'namespace': error.errorType.namespace as String,
+	'identifier': error.errorType.identifier as String ++ '',
+	'childErrors':  vars.errPayload as Object default {}
+}]" doc:name="Set Payload" doc:id="6048063a-47dc-481d-b1e0-4b6eabe7992c" />
 			<logger level="INFO" doc:name="Logger" doc:id="de7d9f41-ad21-43f6-b870-d479e4fd9df7" message="#[payload]"/>
 		</on-error-propagate>
 	</error-handler>
