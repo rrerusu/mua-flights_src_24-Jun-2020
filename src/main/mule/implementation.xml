@@ -16,13 +16,6 @@ http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/
 http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd">
 	
 	<flow name="getFlights_main" doc:id="abe5daf6-de7a-425d-a3de-dbd261eec1db" >
-		<http:listener doc:name="Listener" doc:id="2e557bd0-b292-4390-b825-ba9631f9d77a" config-ref="httpListenerConnector" path="/flights">
-			<http:error-response>
-				<http:body ><![CDATA[#[output application/json
----
-payload]]]></http:body>
-			</http:error-response>
-		</http:listener>
 		<flow-ref doc:name="setCityCode_and_setAirlineName" doc:id="bd0e7e38-f8b9-4fe0-bdc0-8f3a0c34d9e1" name="setCityCode_and_setAirlineName"/>
 		<validation:is-true doc:name="Is Valid Destination?" doc:id="5b85ca1a-168f-4181-b946-b0d1c48a3841" expression="#[['SFO', 'LAX', 'CLE', 'PDX', 'PDF', 'ALL'] contains vars.cityCode]" message="#['Invalid destination' ++ ' ' ++ (vars.cityCode default ' ')]"/>
 		<choice doc:name="Choice" doc:id="6cc1fb95-ad01-49ac-9bbd-d0f6caa2dc58" >
@@ -123,15 +116,15 @@ payload map ( payload01 , indexOfPayload01 ) -> {
 		</ee:transform>
 		<logger level="INFO" doc:name="Logger" doc:id="28862048-e22c-4ddb-95f3-b0e98cfe8e7a" message="#[payload]"/>
 		<error-handler >
-			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="3354ef29-8e99-4f5b-b50e-b2d3bda87808" type="AMERICAN-FLIGHTS-API:BAD_REQUEST">
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="93d9e229-0a01-4aba-a538-b7f64201a41d" type="AMERICAN-FLIGHTS-API:BAD_REQUEST">
 				<set-payload value="#[{
 	'message': 'There are no flights with city code: ' ++ vars.cityCode as String,
 	'namespace': error.errorType.namespace as String,
 	'identifier': error.errorType.identifier as String
 }]" doc:name="Set Payload" doc:id="c8534af2-f46e-4ba9-b660-2d0cceb9ac41" />
-				<set-variable value="#[message.payload]" doc:name="errPayload" doc:id="0a451b33-70ce-4d9c-bd57-9fda21a4cf1e" variableName="errPayload"/>
-				<logger level="INFO" doc:name="Logger" doc:id="f729b5fb-bb96-4d5f-8849-82f5ea1cf030" message="#[payload]"/>
-			</on-error-propagate>
+				<set-variable value="#[message.payload]" doc:name="errPayload" doc:id="0a451b33-70ce-4d9c-bd57-9fda21a4cf1e" variableName="errPayload" />
+				<logger level="INFO" doc:name="Logger" doc:id="f729b5fb-bb96-4d5f-8849-82f5ea1cf030" message="#[payload]" />
+			</on-error-continue>
 		</error-handler>
 	</flow>
 	<flow name="getUnitedFlightsFlow" doc:id="26c752a9-6965-4b1e-805e-be740c20d77b" >
