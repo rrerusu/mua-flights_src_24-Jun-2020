@@ -60,13 +60,34 @@ payload]]></ee:set-payload>
 	<flow name="getAllFlightsFlow" doc:id="be6cf5f6-f2fa-4ca6-aba2-07bb562aaa52" >
 		<scatter-gather doc:name="Scatter-Gather" doc:id="b6e065eb-578c-441d-b6ef-75dd7952d8dd" >
 			<route >
-				<flow-ref doc:name="getAllFlightsFlow" doc:id="a1b69de6-48bd-4d3a-935d-8c2b5f579bd9" name="getAmericanFlightsFlow"/>
+				<try doc:name="Try" doc:id="f7a833aa-0505-481f-ad70-4deee6dc4d30" >
+					<flow-ref doc:name="getAllFlightsFlow" doc:id="a1b69de6-48bd-4d3a-935d-8c2b5f579bd9" name="getAmericanFlightsFlow" />
+					<error-handler >
+						<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="ad859df1-5cc6-4479-b27f-af2e6ec4d05b" type="ANY">
+							<set-payload value="#[[]]" doc:name="Set Payload" doc:id="d39c55e8-ca66-4db4-b590-c20632c7b227" />
+						</on-error-continue>
+					</error-handler>
+				</try>
 			</route>
 			<route >
-				<flow-ref doc:name="getDeltaFlights" doc:id="fd406cf1-9587-4285-b2e1-a9a5e8696b72" name="getDeltaFlights"/>
+				<try doc:name="Try" doc:id="f5723c1b-c13d-41ea-a47e-6c9b299165d2" >
+					<flow-ref doc:name="getDeltaFlights" doc:id="fd406cf1-9587-4285-b2e1-a9a5e8696b72" name="getDeltaFlights" />
+					<error-handler >
+						<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="e71f924e-b171-413a-a931-b9f0d43a958b" type="ANY">
+							<set-payload doc:name="Set Payload" doc:id="e16d06a8-1d15-4e0c-8e52-7277975ae5e7" value="#[[]]"/>
+						</on-error-continue>
+					</error-handler>
+				</try>
 			</route>
 			<route >
-				<flow-ref doc:name="getUnitedFlightsFlow" doc:id="5b0e6fb8-8612-482c-9af9-d9caf19b2ca2" name="getUnitedFlightsFlow"/>
+				<try doc:name="Try" doc:id="8c53f071-3359-4e81-8257-ced243172034" >
+					<flow-ref doc:name="getUnitedFlightsFlow" doc:id="5b0e6fb8-8612-482c-9af9-d9caf19b2ca2" name="getUnitedFlightsFlow" />
+					<error-handler >
+						<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="a7c26bda-bc2a-4f3a-aab9-5755c87ad55e" type="ANY">
+							<set-payload value="#[[]]" doc:name="Set Payload" doc:id="eb2cbfd2-3f76-4d85-9ad1-7ecbddf25a5c" />
+						</on-error-continue>
+					</error-handler>
+				</try>
 			</route>
 		</scatter-gather>
 		<ee:transform doc:name="Transform Message" doc:id="bddbb3d7-57e4-44c6-a5d3-5ec8523e09d1" >
